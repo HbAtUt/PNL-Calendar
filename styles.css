@@ -1,0 +1,404 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #000000;
+  --surface: #000000;
+  --border: #111111;
+  --text: #e8e8e8;
+  --muted: #444444;
+  --green: #4ade80;
+  --green-dim: #1a3024;
+  --green-bg: #1a3024;
+  --green-num: #5a9a72;
+  --red: #ff5c7a;
+  --red-dim: #2a1518;
+  --gold: #f0c040;
+  --gold-bg: #3d3420;
+  --gold-num: #a89050;
+  --radius: 6px;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  user-select: none;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px 24px 16px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #ccc;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.month-label {
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 88px;
+  text-align: center;
+  color: #ddd;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn:hover {
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.close-btn {
+  font-size: 22px;
+  margin-left: 4px;
+}
+
+.currency-select {
+  background: #000000;
+  border: 1px solid var(--border);
+  color: #ccc;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+}
+
+.currency-select:hover {
+  border-color: #1a1a1a;
+}
+
+/* Summary */
+.summary {
+  margin-bottom: 16px;
+}
+
+.total-pnl {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.total-pnl.positive {
+  color: var(--green);
+}
+
+.total-pnl.negative {
+  color: var(--red);
+}
+
+.total-pnl.neutral {
+  color: #666;
+}
+
+.progress-track {
+  display: flex;
+  height: 3px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #000000;
+  margin-bottom: 10px;
+}
+
+.progress-win {
+  background: var(--green);
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+.progress-loss {
+  background: var(--red);
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.stat-win {
+  color: var(--green);
+}
+
+.stat-loss {
+  color: var(--red);
+}
+
+/* Weekdays */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.weekdays span {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Calendar grid */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.day-cell {
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: border-color 0.15s, transform 0.1s;
+  min-height: 0;
+}
+
+.day-cell:hover:not(.empty):not(.win):not(.loss):not(.best) {
+  border-color: #1a1a1a;
+}
+
+.day-cell.win:hover,
+.day-cell.loss:hover,
+.day-cell.best:hover {
+  filter: brightness(1.12);
+}
+
+.day-cell.empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.day-cell .day-num {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.day-cell .pnl-value {
+  font-size: clamp(11px, 1.4vw, 16px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.day-cell.win {
+  background: var(--green-bg);
+  border-color: #243d30;
+}
+
+.day-cell.win .day-num {
+  color: var(--green-num);
+}
+
+.day-cell.win .pnl-value {
+  color: var(--green);
+}
+
+.day-cell.loss {
+  background: var(--red-dim);
+  border-color: #3d2028;
+}
+
+.day-cell.loss .day-num {
+  color: #8a5060;
+}
+
+.day-cell.loss .pnl-value {
+  color: var(--red);
+}
+
+.day-cell.best {
+  background: var(--gold-bg);
+  border-color: #524828;
+}
+
+.day-cell.best .day-num {
+  color: var(--gold-num);
+}
+
+.day-cell.best .pnl-value {
+  color: var(--gold);
+}
+
+.day-cell.today {
+  outline: 1px solid #222222;
+  outline-offset: -1px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-card {
+  position: relative;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  width: min(400px, 90vw);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.modal-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.edit-date {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.pnl-input {
+  width: 100%;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 18px;
+  font-family: inherit;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.pnl-input:focus {
+  border-color: var(--green);
+}
+
+.hint {
+  font-size: 11px;
+  color: #555;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-ghost {
+  background: #0a0a0a;
+  color: #ccc;
+}
+
+.btn-ghost:hover {
+  background: #141414;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #000000;
+}
+
+.btn-primary:hover {
+  background: #5dffa0;
+}
