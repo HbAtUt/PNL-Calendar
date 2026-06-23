@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'" />
+  <title>PNL Calendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1 class="title">PNL Calendar</h1>
+      <div class="header-controls">
+        <div class="month-nav">
+          <button type="button" class="icon-btn" id="prev-month" aria-label="Previous month">‹</button>
+          <span class="month-label" id="month-label">Jan 2026</span>
+          <button type="button" class="icon-btn" id="next-month" aria-label="Next month">›</button>
+        </div>
+        <select class="currency-select" id="currency-select" aria-label="Currency">
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="CAD">CAD</option>
+          <option value="AUD">AUD</option>
+          <option value="JPY">JPY</option>
+        </select>
+        <button type="button" class="icon-btn" id="import-btn" title="Import data">↓</button>
+        <button type="button" class="icon-btn" id="export-btn" title="Export data">↑</button>
+        <button type="button" class="icon-btn close-btn" id="close-btn" aria-label="Close">×</button>
+      </div>
+    </header>
+
+    <section class="summary">
+      <div class="total-pnl" id="total-pnl">+$0</div>
+      <div class="progress-track">
+        <div class="progress-win" id="progress-win"></div>
+        <div class="progress-loss" id="progress-loss"></div>
+      </div>
+      <div class="stats-row">
+        <span class="stat-win" id="stat-win">0 / $0</span>
+        <span class="stat-loss" id="stat-loss">0 / $0</span>
+      </div>
+    </section>
+
+    <div class="weekdays">
+      <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+  </div>
+
+  <div class="modal hidden" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-card">
+      <h2 id="edit-title">Edit PNL</h2>
+      <p class="edit-date" id="edit-date-label"></p>
+      <label class="field-label" for="pnl-input">Amount (use negative for losses)</label>
+      <input type="text" id="pnl-input" class="pnl-input" placeholder="e.g. 20900, 20.9K, -500" autocomplete="off" />
+      <p class="hint">Examples: 25000, 25K, -1.5K, $32,600</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="clear-day">Clear</button>
+        <button type="button" class="btn btn-ghost" id="cancel-edit">Cancel</button>
+        <button type="button" class="btn btn-primary" id="save-edit">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
