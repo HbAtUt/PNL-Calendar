@@ -12,7 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^42.4.1",
-    "electron-builder": "^26.15.3"
+    "electron-builder": "^26.15.3",
+    "png-to-ico": "^3.0.1"
   },
   "build": {
     "appId": "com.pnlcalendar.app",
